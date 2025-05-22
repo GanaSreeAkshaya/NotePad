@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { getAllNotes, addUpdateNote } from "../util/db";
+import { getAllNotes, addUpdateNote, deleteNote } from "../util/db";
 import { v4 as uuidv4 } from "uuid";
 import NoteModal from "./NoteModal";
-import "./NotesList.css"; // Optional custom styles
+import "./NotesList.css";
 
 export default function NotesList() {
   const [notes, setNotes] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null); // note to be deleted
 
   const fetchNotes = async () => {
     const allNotes = await getAllNotes();
@@ -35,6 +36,14 @@ export default function NotesList() {
     setShowModal(true);
   };
 
+  const handleDelete = async () => {
+    if (confirmDelete) {
+      await deleteNote(confirmDelete.id);
+      setConfirmDelete(null);
+      fetchNotes();
+    }
+  };
+
   return (
     <div className="notes-page">
       <nav className="navbar">
@@ -51,7 +60,10 @@ export default function NotesList() {
               <h3>{note.title}</h3>
               <p>{note.content?.substring(0, 100)}...</p>
               <small>Last updated: {new Date(note.updatedAt).toLocaleString()}</small>
-              <button onClick={() => handleEditNote(note)}>✏️ Edit</button>
+              <div className="card-actions">
+                <button onClick={() => handleEditNote(note)}>✏️ Edit</button>
+                <button onClick={() => setConfirmDelete(note)}>🗑 Delete</button>
+              </div>
             </div>
           ))
         )}
@@ -63,6 +75,19 @@ export default function NotesList() {
           onClose={() => setShowModal(false)}
           onSave={fetchNotes}
         />
+      )}
+
+      {confirmDelete && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Delete Note</h3>
+            <p>Are you sure you want to delete "<strong>{confirmDelete.title}</strong>"?</p>
+            <div className="modal-actions">
+              <button onClick={handleDelete}>✅ Yes, Delete</button>
+              <button onClick={() => setConfirmDelete(null)}>❌ Cancel</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
