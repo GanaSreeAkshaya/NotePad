@@ -1,34 +1,39 @@
-.modal-backdrop {
+.modal-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
 }
 
-.modal-content {
+.modal {
   background: white;
   padding: 2rem;
-  border-radius: 1rem;
+  border-radius: 12px;
   width: 90%;
-  max-width: 600px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  max-width: 500px;
 }
 
-.modal-content input,
-.modal-content textarea {
+.modal input,
+.modal textarea {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.6rem;
   margin: 0.5rem 0;
-  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
 }
