@@ -1,20 +1,15 @@
-import { useEffect } from 'react';
-import { syncNotes } from './util/syncing'; 
+import { Routes, Route, Link } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import NotepadPage from './pages/NotepadPage';
 
 function App() {
-  useEffect(() => {
-    syncNotes(); // Run once on mount
-
-    const handleOnline = () => syncNotes();
-
-    window.addEventListener('online', handleOnline);
-    return () => window.removeEventListener('online', handleOnline);
-  }, []);
+  // Sync useEffect here if needed
 
   return (
-    <div>
-    <h1>My Notepad App</h1>
-  </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/notepad" element={<NotepadPage />} />
+    </Routes>
   );
 }
 
